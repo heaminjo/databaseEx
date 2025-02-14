@@ -1,0 +1,59 @@
+-- 직원 테이블
+CREATE TABLE Employees (
+    EMP_ID INT PRIMARY KEY,   -- 직원 ID (기본키)
+    EMP_Name VARCHAR(50),
+    DEPT_ID int-- 이름
+);
+
+-- 부서 테이블
+create table dept(
+	DEPT_ID int primary key,
+    DEPT_NAME varchar(50), 
+    SALALY INT
+);
+
+-- 직원 데이터 추가
+insert into Employees values (1,'김길동',2);
+insert into Employees values (2,'나가랑',1);
+insert into Employees values (3,'박영철',1);
+insert into Employees values (4,'조해민',3);
+insert into Employees values (5,'홍길동',2);
+insert into Employees values (6,'하로로',3);
+insert into Employees values (7,'서장훈',1);
+insert into Employees values (8,'박나래',1);
+insert into Employees values (9,'오나리',3);
+insert into Employees values (10,'이나영',2);
+insert into Employees values (11,'신아영',4);
+insert into Employees values (12,'백제리',4);
+insert into Employees values (13,'우라아',4);
+
+-- 부서 데이터 추가
+insert into DEPT values (1,'영업부',1100000);
+insert into DEPT values (2,'마케팅부',900000);
+insert into DEPT values (3,'회계부',550000);
+insert into DEPT values (4,'서비스부',3000000);
+
+
+
+-- 스칼라 서브 쿼리 
+SELECT EMP_NAME AS "이름",(SELECT DEPT_NAME
+				 FROM DEPT D
+				 WHERE D.DEPT_ID = E.DEPT_ID) AS "부서이름"
+FROM EMPLOYEES E;
+
+-- 서브 쿼리
+-- IN을 사용하여 1000000이 넘는 다중 행을 다 가져올 수 있음
+SELECT E.EMP_NAME AS "이름",
+	   D.DEPT_NAME AS "부서",
+       D.SALALY AS "월급"
+FROM EMPLOYEES E, DEPT D
+WHERE E.DEPT_ID = D.DEPT_ID AND 
+	D.DEPT_ID IN (SELECT DEPT_ID
+	   FROM DEPT D
+       WHERE SALALY > 1000000); 
+
+-- 인라인 뷰
+SELECT E.EMP_NAME , DEPT_NAME, SALALY
+FROM (SELECT *
+	  FROM DEPT)D,EMPLOYEES E
+WHERE SALALY > 1000000 AND D.DEPT_ID = E.DEPT_ID;
