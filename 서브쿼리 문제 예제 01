@@ -1,0 +1,11 @@
+-- 각 부서의 평균 급여보다 높은 급여를 받는 직원이 가장 많이 있는 부서를 출력
+
+
+select department_id
+from employee e 
+where salary > (select avg(salary)
+                from employee
+                where department_id = e.department_id)
+group by department_id
+order by count(*) desc
+fetch first 1 rows only
