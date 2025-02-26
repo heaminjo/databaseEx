@@ -1,0 +1,26 @@
+-- 그룹 함수 ROLLUP
+
+-- RollUp을 사용하여 각 부서별 합계와 총합계를 생성하기
+select department_id , sum(salary)
+from employee
+group by rollup (department_id);
+
+-- rollup 에 인자 2개
+-- 부서 별 각 직업에 따른 급여의 합계과 전체 합계
+select department ,job_title , sum(salary)
+from employee02
+group by rollup(department,job_title);
+
+-- 연도별 월별 주문 금액 합계
+SELECT to_char(ORDER_DATE,'YY'),to_char(ORDER_DATE,'mm'),SUM(TOTAL_AMOUNT)
+FROM ORDERS
+GROUP BY ROLLUP(to_char(ORDER_DATE,'YY'),to_char(ORDER_DATE,'mm'))
+order by to_char(ORDER_DATE,'YY');
+
+-- 고객별 연도별 분기별 주문 총액 구하기
+select c.customer_id,to_char(o.order_date,'YY'),to_char(o.order_date,'dd'),sum(total_amount)
+from orders o
+join customers c on o.customer_id = c.customer_id 
+group by rollup(c.customer_id,to_char(o.order_date,'YY'),to_char(o.order_date,'dd'))
+order by c.customer_id;
+SELECT * FROM EMPLOYEE02;
